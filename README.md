@@ -1,10 +1,11 @@
 # Cosplayin-BE
 ea
 
-Requerment 
+Requirements 
+```
 -Postgresql database
 -Dbeaver DBMS
 -Nodejs
-
+```
 
 GACOR KANG
