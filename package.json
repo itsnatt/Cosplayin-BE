@@ -4,5 +4,14 @@
     "cors": "^2.8.5",
     "express": "^4.18.3",
     "mongoose": "^8.2.1"
-  }
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "cosplayin-pp",
+  "description": "ea",
+  "version": "1.0.0",
+  "main": "server.js",
+  "author": "",
+  "license": "ISC"
 }
