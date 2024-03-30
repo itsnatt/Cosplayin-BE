@@ -14,6 +14,7 @@ app.use('/api', require('./routes/index')); // Rute yang dilindungi oleh autenti
 app.use(require('./routes/user'));
 app.use(require('./routes//Table/province'));
 app.use(require('./routes//Table/distritct'));
+app.use(require('./routes//Table/Subdistrict'));
 
 
 

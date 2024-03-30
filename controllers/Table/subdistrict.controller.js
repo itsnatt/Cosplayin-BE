@@ -12,15 +12,25 @@ const getSubdistricts = async (req, res) => {
     }
 };
 
+// Menampilkan subdistrik berdasarkan ID
+const getSubdistrictById = async(req,res) => {
+    const id = req.params.id;
+    try {
+        const response = await pool.query('SELECT * FROM "Subdistrict" WHERE "SubdistrictID" = $1',[id]);
+        res.json(response.rows);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
 // Menambahkan subdistrik baru
 const createSubdistrict = async (req, res) => {
-    const { SubdistrictID, Subdistrict, DistrictID_fk } = req.body;
-    const currentTime = new Date(); // Waktu saat ini
-
+    const { Subdistrict, DistrictID_fk } = req.body;
     try {
         const newSubdistrict = await pool.query(
-            'INSERT INTO "Subdistrict" ("SubdistrictID", "Subdistrict", "DistrictID_fk", "CreateTime") VALUES ($1, $2, $3, $4) RETURNING *',
-            [SubdistrictID, Subdistrict, DistrictID_fk, currentTime]
+            'INSERT INTO "Subdistrict" ("Subdistrict", "DistrictID_fk") VALUES ($1, $2) RETURNING *',
+            [Subdistrict, DistrictID_fk]
         );
         res.status(201).json(newSubdistrict.rows[0]);
     } catch (error) {
@@ -28,15 +38,17 @@ const createSubdistrict = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
 // Mengupdate subdistrik
 const updateSubdistrict = async (req, res) => {
-    const { SubdistrictID } = req.params;
-    const { Subdistrict, DistrictID_fk, EditTime } = req.body;
+    const id = req.params.id;
+    const { Subdistrict, DistrictID_fk } = req.body;
     const currentTime = new Date(); // Waktu saat ini
+
     try {
         const updatedSubdistrict = await pool.query(
             'UPDATE "Subdistrict" SET "Subdistrict" = $1, "DistrictID_fk" = $2, "EditTime" = $3 WHERE "SubdistrictID" = $4 RETURNING *',
-            [Subdistrict, DistrictID_fk, currentTime, SubdistrictID]
+            [Subdistrict, DistrictID_fk, currentTime, id]
         );
         res.json(updatedSubdistrict.rows[0]);
     } catch (error) {
@@ -47,9 +59,9 @@ const updateSubdistrict = async (req, res) => {
 
 // Menghapus subdistrik
 const deleteSubdistrict = async (req, res) => {
-    const { SubdistrictID } = req.params;
+    const id = req.params.id;
     try {
-        await pool.query('DELETE FROM "Subdistrict" WHERE "SubdistrictID" = $1', [SubdistrictID]);
+        await pool.query('DELETE FROM "Subdistrict" WHERE "SubdistrictID" = $1', [id]);
         res.json({ message: 'Subdistrict deleted successfully' });
     } catch (error) {
         console.error('Error:', error);
@@ -59,6 +71,7 @@ const deleteSubdistrict = async (req, res) => {
 
 module.exports = {
     getSubdistricts,
+    getSubdistrictById,
     createSubdistrict,
     updateSubdistrict,
     deleteSubdistrict
