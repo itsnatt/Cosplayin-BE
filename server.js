@@ -13,6 +13,8 @@ app.use('/auth', require('./routes/auth')); // Rute untuk autentikasi
 app.use('/api', require('./routes/index')); // Rute yang dilindungi oleh autentikasi
 app.use(require('./routes/user'));
 app.use(require('./routes//Table/province'));
+app.use(require('./routes//Table/distritct'));
+
 
 
 app.listen(process.env.PORT || 4000, () => {
