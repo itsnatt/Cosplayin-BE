@@ -1,33 +1,42 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5021;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
-// Routes akan ditambahkan di sini
+// Koneksi ke MongoDB
+const MONGODB_USERNAME = 'asep';
+const MONGODB_PASSWORD = 'stroberi';
+const MONGODB_HOST = 'node-fr-02.stegripe.org';
+const MONGODB_PORT = '4015';
+const MONGODB_DATABASE = 'cospl2';
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
-// koneksi mongoDB
-const mongoose = require('mongoose');
-
-const MONGODB_URI = 'YOUR_MONGODB_URI';
+const MONGODB_URI = `mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DATABASE}?authSource=admin&authMechanism=SCRAM-SHA-256`;
 
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 })
-.then(() => console.log('MongoDB connected'))
+.then(() => {
+  console.log('MongoDB terhubung');
+  
+  // Tambahkan rute setelah koneksi berhasil
+  const provinceRoutes = require('./routes/provinceRoutes');
+  app.use('/api/provinces', provinceRoutes);
+
+  // Mulai server setelah koneksi berhasil
+  app.listen(PORT, () => {
+    console.log(`Server berjalan di port ${PORT}`);
+  });
+})
 .catch(err => console.log(err));
 
-// koneksi ke costumeRoutes
-const costumeRoutes = require('./routes/costumeRoutes');
-app.use('/api/costumes', costumeRoutes);
+// Koneksi ke MongoDB
+//onst MONGODB_URI = 'mongodb://anis:banjir@node-fr-02.stegripe.org:4015/cospl';
 
