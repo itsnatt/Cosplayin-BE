@@ -23,7 +23,7 @@ app.use(require('./routes//Table/role'));
 app.use(require('./routes//Table/user'));
 app.use(require('./routes//Table/category'));
 app.use(require('./routes//Table/store'));
-// app.use(require('./routes//Table/store'));
+app.use(require('./routes//Table/product'));
 // app.use(require('./routes//Table/store'));
 // app.use(require('./routes//Table/store'));
 
