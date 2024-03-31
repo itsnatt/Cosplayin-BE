@@ -18,6 +18,8 @@ app.use(require('./routes//Table/province'));
 app.use(require('./routes//Table/distritct'));
 app.use(require('./routes//Table/Subdistrict'));
 app.use(require('./routes//Table/address'));
+app.use(require('./routes//Table/status'));
+
 
 
 
