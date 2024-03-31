@@ -20,7 +20,7 @@ app.use(require('./routes//Table/Subdistrict'));
 app.use(require('./routes//Table/address'));
 app.use(require('./routes//Table/status'));
 app.use(require('./routes//Table/role'));
-// app.use(require('./routes//Table/status'));
+app.use(require('./routes//Table/user'));
 // app.use(require('./routes//Table/status'));
 // app.use(require('./routes//Table/status'));
 
