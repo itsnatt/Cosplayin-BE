@@ -12,9 +12,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/auth', require('./routes/auth')); // Rute untuk autentikasi
 app.use('/api', require('./routes/index')); // Rute yang dilindungi oleh autentikasi
 app.use(require('./routes/user'));
+
+//simpeld tabel api - kurang auth
 app.use(require('./routes//Table/province'));
 app.use(require('./routes//Table/distritct'));
 app.use(require('./routes//Table/Subdistrict'));
+app.use(require('./routes//Table/address'));
 
 
 
