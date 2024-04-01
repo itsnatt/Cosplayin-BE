@@ -25,7 +25,7 @@ app.use(require('./routes//Table/category'));
 app.use(require('./routes//Table/store'));
 app.use(require('./routes//Table/product'));
 app.use(require('./routes//Table/favorite'));
-// app.use(require('./routes//Table/store'));
+app.use(require('./routes//Table/review'));
 
 
 
