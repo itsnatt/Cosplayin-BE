@@ -1,6 +1,3 @@
-
-// index.js
-
 const express = require('express');
 const app = express();
 
@@ -8,10 +5,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Routes
-app.use('/auth', require('./routes/auth')); // Rute untuk autentikasi
-app.use('/api', require('./routes/index')); // Rute yang dilindungi oleh autentikasi
-app.use(require('./routes/user'));
+// Import middleware functions
+
+
 
 //simpeld tabel api - kurang auth
 app.use(require('./routes//Table/province'));
@@ -26,12 +22,11 @@ app.use(require('./routes//Table/store'));
 app.use(require('./routes//Table/product'));
 app.use(require('./routes//Table/favorite'));
 app.use(require('./routes//Table/review'));
+//funs
+app.use(require('./routes//Funs/searchRoutes'));
 
-
-
-
-app.listen(process.env.PORT || 4000, () => {
-    console.log('Server is running...');
+// Server listening
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
-
-

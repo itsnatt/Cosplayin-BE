@@ -26,7 +26,8 @@ const getUserById = async(req,res) => {
 
 // Menambahkan pengguna baru
 const createUser = async (req, res) => {
-    const { FullName, Username, Password, Email, RoleID_fk, AddressID_fk } = req.body;
+    const { FullName, Username, Password, Email, AddressID_fk } = req.body;
+    const RoleID_fk = 0;
     try {
         const newUser = await pool.query(
             'INSERT INTO "User" ("FullName", "Username", "Password", "Email", "RoleID_fk", "AddressID_fk") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
