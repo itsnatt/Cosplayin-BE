@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const router = Router();
 
-const { getProvinces, createProvince, updateProvince, deleteProvince, getProvincesById } = require('../../controllers/table/province.controller');
+const { getProvinces, createProvince, updateProvince, deleteProvince, getProvincesById } = require('../../controllers/table/address/province.controller');
 const verifyToken = require('../../middleware');
 
 router.get('/province', getProvinces);

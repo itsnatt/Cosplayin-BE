@@ -1,5 +1,5 @@
 // controllers/province.controller.js
-const pool = require('../../middleware/db');
+const pool = require('../../../middleware/db');
 
 // Menampilkan semua provinsi
 const getProvinces = async (req, res) => {

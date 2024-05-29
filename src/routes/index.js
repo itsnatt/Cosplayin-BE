@@ -7,13 +7,13 @@ const PostsController = require('../controllers/posts-controller.js');
 
 
 // Auth routes
-router.post('/api/register', firebaseAuthController.registerUser);
-router.post('/api/login', firebaseAuthController.loginUser);
-router.post('/api/logout', firebaseAuthController.logoutUser);
-router.post('/api/reset-password', firebaseAuthController.resetPassword);
+router.post('/auth/register', firebaseAuthController.registerUser);
+router.post('/auth/login', firebaseAuthController.loginUser);
+router.post('/auth/logout', firebaseAuthController.logoutUser);
+router.post('/auth/reset-password', firebaseAuthController.resetPassword);
 
 //posts routes
-router.get('/api/posts', verifyToken, PostsController.getPosts);
+router.get('/auth/posts', verifyToken, PostsController.getPosts);
 router.use(require('./table/province.js'));
 
 
