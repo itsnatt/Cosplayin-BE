@@ -4,10 +4,10 @@ const router = Router();
 const { getDistricts, createDistrict, updateDistrict, deleteDistrict, getDistrictById } = require('../../controllers/table/address/district.controller');
 const verifyToken = require('../../middleware');
 
-router.get('/district', getDistricts);
-router.get('/district/:id', getDistrictById);
-router.post('/district', createDistrict);
-router.delete('/district/:id', deleteDistrict);
-router.put('/district/:id', updateDistrict);
+router.get('/address/district', getDistricts);
+router.get('/address/district/:id', getDistrictById);
+router.post('/address/district', createDistrict);
+router.delete('/address/district/:id', deleteDistrict);
+router.put('/address/district/:id', updateDistrict);
 
 module.exports = router;
