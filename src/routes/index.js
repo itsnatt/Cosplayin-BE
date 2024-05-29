@@ -14,7 +14,11 @@ router.post('/auth/reset-password', firebaseAuthController.resetPassword);
 
 //posts routes
 router.get('/auth/posts', verifyToken, PostsController.getPosts);
+//
 router.use(require('./table/province.js'));
+router.use(require('./table/distritct.js'));
+router.use(require('./table/Subdistrict.js'));
+router.use(require('./table/address.js'));
 
 
 module.exports = router;

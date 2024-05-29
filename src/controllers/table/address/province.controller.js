@@ -4,7 +4,7 @@ const pool = require('../../../middleware/db');
 // Menampilkan semua provinsi
 const getProvinces = async (req, res) => {
     try {
-        const provinces = await pool.query('SELECT * FROM "User"');
+        const provinces = await pool.query('SELECT * FROM "Province"');
         res.json(provinces.rows);
     } catch (error) {
         console.error('Error:', error);
