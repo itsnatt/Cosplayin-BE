@@ -23,6 +23,11 @@ router.use(require('./table/user.js'));
 router.use(require('./table/store.js'));
 router.use(require('./table/categories.js'));
 router.use(require('./table/size.js'));
+router.use(require('./table/products.js'));
+router.use(require('./table/productSizes.js'));
+router.use(require('./table/productCategories.js'));
+
+router.use(require('./table/productPhotos.js'));
 
 
 module.exports = router;

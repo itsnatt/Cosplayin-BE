@@ -1,4 +1,4 @@
-const pool = require('../middleware/db');
+const pool = require('../../../middleware/db');
 
 // Menampilkan semua produk
 const getProducts = async (req, res) => {
