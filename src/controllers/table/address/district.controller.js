@@ -13,6 +13,18 @@ const getDistricts = async (req, res) => {
 };
 
 // Menampilkan distrik berdasarkan ID
+const getDistrictByFk = async(req,res) => {
+    const id = req.params.id;
+    try {
+        const response = await pool.query('SELECT * FROM "District" WHERE "ProvinceID_fk" = $1',[id]);
+        res.json(response.rows);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+// Menampilkan distrik berdasarkan ID
 const getDistrictById = async(req,res) => {
     const id = req.params.id;
     try {
@@ -74,5 +86,6 @@ module.exports = {
     getDistrictById,
     createDistrict,
     updateDistrict,
+    getDistrictByFk,
     deleteDistrict
 };

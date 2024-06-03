@@ -26,12 +26,12 @@ const getUserById = async(req,res) => {
 
 // Menambahkan pengguna baru
 const createUser = async (req, res) => {
-    const { FullName, Username, Password, Email, AddressID_fk } = req.body;
+    const { FullName, Username, Uid, Email, AddressID_fk } = req.body;
     const RoleID_fk = 0;
     try {
         const newUser = await pool.query(
-            'INSERT INTO "User" ("FullName", "Username", "Password", "Email", "RoleID_fk", "AddressID_fk") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-            [FullName, Username, Password, Email, RoleID_fk, AddressID_fk]
+            'INSERT INTO "User" ("FullName", "Username", "Uid", "Email", "RoleID_fk", "AddressID_fk") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [FullName, Username, Uid, Email, RoleID_fk, AddressID_fk]
         );
         res.status(201).json(newUser.rows[0]);
     } catch (error) {
@@ -43,13 +43,13 @@ const createUser = async (req, res) => {
 // Mengupdate pengguna
 const updateUser = async (req, res) => {
     const id = req.params.id;
-    const { FullName, Username, Password, Email, RoleID_fk, AddressID_fk } = req.body;
+    const { FullName, Username, Email, RoleID_fk, AddressID_fk } = req.body;
     const currentTime = new Date(); // Waktu saat ini
 
     try {
         const updatedUser = await pool.query(
-            'UPDATE "User" SET "FullName" = $1, "Username" = $2, "Password" = $3, "Email" = $4, "RoleID_fk" = $5, "AddressID_fk" = $6, "EditTime" = $7 WHERE "UserID" = $8 RETURNING *',
-            [FullName, Username, Password, Email, RoleID_fk, AddressID_fk, currentTime, id]
+            'UPDATE "User" SET "FullName" = $1, "Username" = $2, "Email" = $3, "RoleID_fk" = $4, "AddressID_fk" = $5, "EditTime" = $6 WHERE "UserID" = $7 RETURNING *',
+            [FullName, Username, Email, RoleID_fk, AddressID_fk, currentTime, id]
         );
         res.json(updatedUser.rows[0]);
     } catch (error) {

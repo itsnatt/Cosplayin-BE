@@ -19,6 +19,7 @@ router.use(require('./table/province.js'));
 router.use(require('./table/distritct.js'));
 router.use(require('./table/Subdistrict.js'));
 router.use(require('./table/address.js'));
+router.use(require('./table/user.js'));
 
 
 module.exports = router;

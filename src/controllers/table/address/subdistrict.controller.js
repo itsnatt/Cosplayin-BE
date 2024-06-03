@@ -11,6 +11,17 @@ const getSubdistricts = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+const getSubdistrictByFk = async(req,res) => {
+    const id = req.params.id;
+    try {
+        const response = await pool.query('SELECT * FROM "Subdistrict" WHERE "DistrictID_fk" = $1',[id]);
+        res.json(response.rows);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
 
 // Menampilkan subdistrik berdasarkan ID
 const getSubdistrictById = async(req,res) => {
@@ -74,5 +85,6 @@ module.exports = {
     getSubdistrictById,
     createSubdistrict,
     updateSubdistrict,
+    getSubdistrictByFk,
     deleteSubdistrict
 };

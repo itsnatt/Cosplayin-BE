@@ -67,6 +67,7 @@ class FirebaseAuthController {
         res.status(500).json({ error: errorMessage });
       });
   }
+
   
 
   loginUser(req, res) {
