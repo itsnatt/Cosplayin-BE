@@ -20,6 +20,9 @@ router.use(require('./table/distritct.js'));
 router.use(require('./table/Subdistrict.js'));
 router.use(require('./table/address.js'));
 router.use(require('./table/user.js'));
+router.use(require('./table/store.js'));
+router.use(require('./table/categories.js'));
+router.use(require('./table/size.js'));
 
 
 module.exports = router;
