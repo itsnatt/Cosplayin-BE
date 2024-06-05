@@ -24,8 +24,8 @@ class FirebaseAuthController {
         sendEmailVerification(user)
           .then(() => {
             const uid = user.uid;
-            const roleID = 1;
-            const address = 4;
+            const roleID = 0;
+            const address = 0;
 
             pool.query(
               'INSERT INTO "User" ("FullName", "Username", "UID", "Email", "RoleID_fk", "AddressID_fk") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
@@ -67,6 +67,22 @@ class FirebaseAuthController {
         res.status(500).json({ error: errorMessage });
       });
   }
+
+  sendEmail(req, res){
+    const user = auth.currentUser;
+    if (!user) {
+      return res.status(401).json({ error: 'No user is signed in' });
+    }
+  
+    sendEmailVerification(user)
+      .then(() => {
+        res.status(200).json({ message: 'Verification email sent successfully!' });
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).json({ error: 'Error sending email verification' });
+      });
+  };
 
   
 

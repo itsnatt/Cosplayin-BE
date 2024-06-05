@@ -11,10 +11,12 @@ router.post('/auth/register', firebaseAuthController.registerUser);
 router.post('/auth/login', firebaseAuthController.loginUser);
 router.post('/auth/logout', firebaseAuthController.logoutUser);
 router.post('/auth/reset-password', firebaseAuthController.resetPassword);
+router.post('/auth/sendEmail', firebaseAuthController.sendEmail);
 
 //posts routes
 router.get('/auth/posts', verifyToken, PostsController.getPosts);
 //
+router.use(verifyToken);
 router.use(require('./table/province.js'));
 router.use(require('./table/distritct.js'));
 router.use(require('./table/Subdistrict.js'));
