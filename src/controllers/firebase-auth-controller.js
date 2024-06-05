@@ -31,6 +31,7 @@ class FirebaseAuthController {
               'INSERT INTO "User" ("FullName", "Username", "UID", "Email", "RoleID_fk", "AddressID_fk") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
               [fullName, username, uid, email, roleID, address])
               .then((result) => {
+                const newUser = result.rows[0];
                 signInWithEmailAndPassword(auth, email, password)
                   .then((loginCredential) => {
                     const idToken = loginCredential._tokenResponse.idToken;
@@ -41,7 +42,12 @@ class FirebaseAuthController {
                       res.status(201).json({
                         message: 'Verification email sent! User created and logged in successfully!',
                         user: result.rows[0],
-                        token: idToken
+                        token: idToken,
+                        userinfo: {
+                          UserID: newUser.UserID,
+                          username: newUser.Username,
+                          email: newUser.Email
+                        },
                       });
                     } else {
                       res.status(500).json({ error: 'Internal Server Error' });
@@ -84,34 +90,61 @@ class FirebaseAuthController {
       });
   };
 
-  
-
   loginUser(req, res) {
     const { email, password } = req.body;
     if (!email || !password) {
-        return res.status(422).json({
-            email: "Email is required",
-            password: "Password is required",
-        });
+      return res.status(422).json({
+        email: "Email is required",
+        password: "Password is required",
+      });
     }
+  
     signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => { 
-          const idToken = userCredential._tokenResponse.idToken
-            if (idToken) {
+      .then((userCredential) => {
+        const idToken = userCredential._tokenResponse.idToken;
+        const uid = userCredential.user.uid;
+  
+        if (idToken) {
+          // Query untuk mendapatkan data user dari database berdasarkan UID
+          pool.query(
+            'SELECT "UserID", "Username", "Email" FROM "User" WHERE "UID" = $1',
+            [uid]
+          )
+            .then((result) => {
+              if (result.rows.length > 0) {
+                const user = result.rows[0];
+  
                 res.cookie('access_token', idToken, {
-                    httpOnly: true
+                  httpOnly: true
                 });
-                res.status(200).json({ message: "User logged in successfully", userCredential });
-            } else {
-                res.status(500).json({ error: "Internal Server Error" });
-            }
-        })
-        .catch((error) => {
-            console.error(error);
-            const errorMessage = error.message || "An error occurred while logging in";
-            res.status(500).json({ error: errorMessage });
-        });
+                res.status(200).json({
+                  message: "User logged in successfully",
+                  userinfo: {
+                    UserID: user.UserID,
+                    username: user.Username,
+                    email: user.Email
+                  },
+                  token: idToken
+                });
+              } else {
+                res.status(404).json({ error: "User not found in database" });
+              }
+            })
+            .catch((dbError) => {
+              console.error(dbError);
+              res.status(500).json({ error: "Error querying user from database" });
+            });
+        } else {
+          res.status(500).json({ error: "Internal Server Error" });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        const errorMessage = error.message || "An error occurred while logging in";
+        res.status(500).json({ error: errorMessage });
+      });
   }
+  
 
   logoutUser(req, res) {
     signOut(auth)
