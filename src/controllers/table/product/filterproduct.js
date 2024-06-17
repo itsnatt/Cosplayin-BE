@@ -123,5 +123,6 @@ const getProductDetails = async (req, res) => {
 
 
 module.exports = {
-    getFilteredProducts,getProductDetails,
+    getFilteredProducts,
+    getProductDetails,
 };
