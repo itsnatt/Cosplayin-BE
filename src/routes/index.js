@@ -30,6 +30,8 @@ router.use(require('./table/productSizes.js'));
 router.use(require('./table/productCategories.js'));
 router.use(require('./table/filterproduct.js'));
 router.use(require('./table/productPhotos.js'));
+router.use(require('./merchantdash/merchant.js'));
+
 
 
 
