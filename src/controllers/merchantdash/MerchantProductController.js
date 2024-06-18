@@ -36,7 +36,9 @@ const updateProduct = async (req, res) => {
     const { id } = req.params;
     const { title, description, unit, price, statusID, stock, categories, sizes, images } = req.body;
     const currentTime = new Date();
+
     try {
+        // Update produk utama
         const productResult = await pool.query(
             'UPDATE "Product" SET "Title" = $1, "Description" = $2, "Unit" = $3, "Price" = $4, "StatusID_fk" = $5, "Stock" = $6, "EditTime" = $7 WHERE "ProductID" = $8 RETURNING *',
             [title, description, unit, price, statusID, stock, currentTime, id]
@@ -46,50 +48,56 @@ const updateProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
+        // Hapus data lama
         await pool.query('DELETE FROM "Product_Category" WHERE "ProductID_fk" = $1', [id]);
         await pool.query('DELETE FROM "Product_Size" WHERE "ProductID_fk" = $1', [id]);
         await pool.query('DELETE FROM "Product_Photo" WHERE "ProductID_fk" = $1', [id]);
 
+        // Insert data baru untuk kategori
         for (let categoryID of categories) {
             await pool.query('INSERT INTO "Product_Category" ("ProductID_fk", "CategoryID_fk") VALUES ($1, $2)', [id, categoryID]);
         }
 
+        // Insert data baru untuk ukuran
         for (let sizeID of sizes) {
             await pool.query('INSERT INTO "Product_Size" ("ProductID_fk", "SizeID_fk") VALUES ($1, $2)', [id, sizeID]);
         }
 
+        // Insert data baru untuk foto
         for (let image of images) {
             await pool.query('INSERT INTO "Product_Photo" ("ProductID_fk", "Photo") VALUES ($1, $2)', [id, image]);
         }
 
-        res.status(200).json(productResult.rows[0]);
+        // Dapatkan data kategori, ukuran, dan foto yang baru saja dimasukkan
+        const categoriesResult = await pool.query('SELECT "CategoryID_fk" FROM "Product_Category" WHERE "ProductID_fk" = $1', [id]);
+        const sizesResult = await pool.query('SELECT "SizeID_fk" FROM "Product_Size" WHERE "ProductID_fk" = $1', [id]);
+        const photosResult = await pool.query('SELECT "Photo" FROM "Product_Photo" WHERE "ProductID_fk" = $1', [id]);
+
+        // Format data kategori, ukuran, dan foto ke dalam array
+        const updatedProduct = productResult.rows[0];
+        updatedProduct.categories = categoriesResult.rows.map(row => row.CategoryID_fk);
+        updatedProduct.sizes = sizesResult.rows.map(row => row.SizeID_fk);
+        updatedProduct.photos = photosResult.rows.map(row => row.Photo);
+
+        // Kirim respons yang lengkap
+        res.status(200).json(updatedProduct);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
+
+
 // Menghapus produk
 const deleteProduct = async (req, res) => {
     const { id } = req.params;
-    const { userID } = req.body;
     try {
-        const productResult = await pool.query('SELECT "StoreID_fk" FROM "Product" WHERE "ProductID" = $1', [id]);
-
-        if (productResult.rows.length === 0) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
-
-        const storeID = productResult.rows[0].StoreID_fk;
-        const storeResult = await pool.query('SELECT "UserID_fk" FROM "Store" WHERE "StoreID" = $1', [storeID]);
-
-        if (storeResult.rows.length === 0 || storeResult.rows[0].UserID_fk !== userID) {
-            return res.status(403).json({ message: 'Not authorized to delete this product' });
-        }
-
-        await pool.query('DELETE FROM "Product" WHERE "ProductID" = $1', [id]);
+       
         await pool.query('DELETE FROM "Product_Category" WHERE "ProductID_fk" = $1', [id]);
         await pool.query('DELETE FROM "Product_Size" WHERE "ProductID_fk" = $1', [id]);
         await pool.query('DELETE FROM "Product_Photo" WHERE "ProductID_fk" = $1', [id]);
+        await pool.query('DELETE FROM "Product" WHERE "ProductID" = $1', [id]);
+    
 
         res.status(200).send('Product deleted successfully');
     } catch (error) {
